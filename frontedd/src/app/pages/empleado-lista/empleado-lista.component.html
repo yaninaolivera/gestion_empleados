@@ -1,0 +1,119 @@
+<div class="container mx-auto px-4">
+  <div class="p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-medium">Lista de empleados</h1>
+    <a routerLink="/empleados/nuevo" type="button" class="btn-primary">Nuevo empleado</a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="table-th">ID</th>
+          <th class="table-th">Primer apellido</th>
+          <th class="table-th">Segundo apellido</th>
+          <th class="table-th">Primer nombre</th>
+          <th class="table-th">Otro nombre</th>
+          <th class="table-th">País de empleo</th>
+          <th class="table-th">Tipo de identificación</th>
+          <th class="table-th">Número de identificación</th>
+          <th class="table-th">Correo electrónico</th>
+          <th class="table-th">Fecha de ingreso</th>
+          <th class="table-th">Área</th>
+          <th class="table-th">Fecha de registro</th>
+          <th class="table-th">Estado</th>
+          <th class="table-th">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr [formGroup]="buscar">
+          <td class="table-td"></td>
+          <td class="table-td">
+            <input type="text" formControlName="primer_apellido" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="segundo_apellido" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="primer_nombre" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="otro_nombre" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="pais_empleo" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="tipo_identificacion" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="numero_identificacion" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td">
+            <input type="text" formControlName="correo_electronico" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td"></td>
+          <td class="table-td">
+            <input type="text" formControlName="area" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td"></td>
+          <td class="table-td">
+            <input type="text" formControlName="estado" (keyup)="ngLista()" class="w-full px-2 border rounded-md">
+          </td>
+          <td class="table-td"></td>
+        </tr>
+        @if (flaq) {
+          <tr>
+            <td colspan="10" class="text-center">Cargando ...</td>
+          </tr>
+        }@else {
+          @for (item of empleados; track $index) {
+            <tr>
+              <td class="table-td">{{item.id}}</td>
+              <td class="table-td">{{item.primer_apellido}}</td>
+              <td class="table-td">{{item.segundo_apellido}}</td>
+              <td class="table-td">{{item.primer_nombre}}</td>
+              <td class="table-td">{{item.otro_nombre}}</td>
+              <td class="table-td">{{item.pais_empleo}}</td>
+              <td class="table-td">{{item.tipo_identificacion}}</td>
+              <td class="table-td">{{item.numero_identificacion}}</td>
+              <td class="table-td">{{item.correo_electronico}}</td>
+              <td class="table-td">{{item.fecha_ingreso}}</td>
+              <td class="table-td">{{item.area}}</td>
+              <td class="table-td">{{ formatDate(item.created_at) }}</td>
+              <td class="table-td">
+                @if (item.estado == 1) {
+                  <span>Activo</span>
+                }@else {
+                  <span>Inactivo</span>
+                }
+              </td>
+              <td>
+                <button type="button" class="btn-edit mr-1" (click)="ngEdit(item.id)">Editar</button> 
+                <button type="button" class="btn-delete" (click)="ngDelete(item.id)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="flex items-center justify-between mt-3">
+    <div class="flex flex-1 justify-between sm:hidden">
+        <a href="#" class="pag-control-sm">Atrás</a>
+        <a href="#" class="pag-control-sm">Siguiente</a>
+    </div>
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm text-gray-700">Total {{paginacion.total}} registros {{paginacion.current_page}}/{{paginacion.last_page}}</p>
+        </div>
+        <div>
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+                <a href="#" class="pag-control rounded-l-md" [class.disabled]="paginacion.current_page <= 1">Atrás</a>
+                @for (item of ngPaginate(paginacion.last_page); track $index) {
+                    <a href="#" class="pag-btn" [class.pag-btn-active]="paginacion.current_page == item">{{item}}</a>
+                }
+                <a href="#" class="pag-control rounded-r-md" [class.disabled]="paginacion.current_page >= 1">Siguiente</a>
+            </nav>
+        </div>
+    </div>
+  </div>
+</div>
